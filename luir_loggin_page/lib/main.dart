@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:luirlogginpage/screens/login_screen.dart';
-import 'package:luirlogginpage/screens/SignUp_screen.dart';
+
+import 'View/screens/CheckEmail.dart';
+import 'View/screens/ForgotPassword.dart';
+
+import 'View/screens/login_screen.dart';
+
 
 
 void main() {
@@ -17,7 +21,10 @@ class MyApp extends StatelessWidget {
       initialRoute: 'SignIn',
       routes: {
         'SignIn':(context)=>LoginScreen(),
-        'SignUp':(context)=>SignUpScreen(),
+
+        //'ForgotPassword':(context)=>ForgotPassword(),
+        'CheckEmail':(context)=>CheckEmail(),
+       //'ValidateCode':(context)=>ValidateCode(),
       },
 
     );
