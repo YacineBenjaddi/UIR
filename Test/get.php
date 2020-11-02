@@ -1,8 +1,8 @@
 <?php
 include 'conn.php';
-$email=$_POST['email'];
+$email=isset($_POST['email']) ? $_POST['email'] : '';
 
-$queryResult=$connect->query("SELECT * FROM User WHERE email='".$email."' ");
+$queryResult=$connect->query("SELECT * FROM user WHERE email='".$email."' ");
 
 $result=array();
 
