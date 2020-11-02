@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.1
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : Dim 01 nov. 2020 à 16:27
--- Version du serveur :  10.4.11-MariaDB
--- Version de PHP : 7.4.2
+-- Généré le : lun. 02 nov. 2020 à 02:43
+-- Version du serveur :  10.4.14-MariaDB
+-- Version de PHP : 7.4.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -33,7 +32,6 @@ CREATE TABLE `horaire` (
   `creneau` varchar(30) NOT NULL,
   `disponibilite` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
--- Erreur de lecture des données pour la table uir.horaire : #1064 - Erreur de syntaxe près de 'FROM `uir`.`horaire`' à la ligne 1
 
 -- --------------------------------------------------------
 
@@ -63,16 +61,22 @@ CREATE TABLE `user` (
   `penalty` int(11) NOT NULL,
   `gender` varchar(30) NOT NULL,
   `profile` varchar(20) NOT NULL,
-  `reset` int(11) NOT NULL
+  `reset` int(11) NOT NULL,
+  `code` varchar(50) NOT NULL,
+  `year` varchar(50) NOT NULL,
+  `filiere` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `user`
 --
 
-INSERT INTO `user` (`id_user`, `first_name`, `last_name`, `email`, `password`, `penalty`, `gender`, `profile`, `reset`) VALUES
-(1, 'reda', 'essadiki', 'reda.essadiki@uir.ac.ma', '123', 0, 'male', 'User', 0),
-(3, 'yassine', 'benjaddi', 'yassine.benjaddi@uir.ac.ma', '12we', 0, 'male', 'User', 0);
+INSERT INTO `user` (`id_user`, `first_name`, `last_name`, `email`, `password`, `penalty`, `gender`, `profile`, `reset`, `code`, `year`, `filiere`) VALUES
+(1, 'rida', 'essadiki', 'rida.essadiki@uir.ac.ma', '123678', 1, 'male', 'User', 0, '105180', '5 eme', 'ISI'),
+(3, 'yassine', 'benjaddi', 'yassine.benjaddi@uir.ac.ma', '12we', 0, 'male', 'User', 0, '123465', 'eme', 'ISI'),
+(4, 'manal', 'el ouardani', 'manal.elouardani@uir.ac.ma', '123000', 0, 'female', 'User', 0, '159786', '5 eme', 'ISI'),
+(5, 'Ilias', 'siyassi', 'ilias.siyassi@uir.ac.ma', '', 0, 'male', 'User', 0, '145786', '5 eme', 'ISI '),
+(6, 'Wail', 'Lamhannad', 'Wail.Lamhannad@uir.ac.ma', '', 0, 'male', 'User', 0, '157896', '5 eme', 'ISI');
 
 --
 -- Index pour les tables déchargées
@@ -112,7 +116,7 @@ ALTER TABLE `reservation`
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Contraintes pour les tables déchargées
