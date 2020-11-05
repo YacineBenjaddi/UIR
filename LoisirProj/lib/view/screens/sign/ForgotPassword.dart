@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:LoisirProj/controller/utilities/ApiUrl.dart';
-import 'package:LoisirProj/view/screens/login_screen.dart';
+import 'login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -40,34 +40,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }
 
   var loading = false;
-
-  int PopUp() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(" Message log",
-                style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.normal,
-                    fontFamily: 'Montserrat')),
-            content: Text("Update is correct",
-                style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.normal,
-                    fontFamily: 'Montserrat')),
-            actions: <Widget>[
-              FlatButton(
-                child: Text("OK"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              )
-            ],
-          );
-        });
-  }
-
   UpdatePassword()async {
 
     final response = await http.post(ApiUrl.addpassword, body: {"email": widget.email, "password": password});
@@ -77,7 +49,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     int value = data['value'];
     print("Value is : $value");
     if (value == 1) {
-      PopUp();
+     // PopUp();
       var route = new MaterialPageRoute(
         builder: (BuildContext context) => new LoginScreen(),
       );

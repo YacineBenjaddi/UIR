@@ -4,7 +4,7 @@ import 'package:LoisirProj/controller/utilities/ApiUrl.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../../homepage.dart';
+import '../../../homepage.dart';
 import 'login_screen.dart';
 
 class SignupPassword extends StatefulWidget {
@@ -42,33 +42,6 @@ class _SignupPasswordState extends State<SignupPassword> {
 
   var loading = false;
 
-  int PopUp() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(" Message log",
-                style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.normal,
-                    fontFamily: 'Montserrat')),
-            content: Text("Update is correct",
-                style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.normal,
-                    fontFamily: 'Montserrat')),
-            actions: <Widget>[
-              FlatButton(
-                child: Text("OK"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              )
-            ],
-          );
-        });
-  }
-
   UpdatePassword()async {
 
     final response = await http
@@ -79,11 +52,11 @@ class _SignupPasswordState extends State<SignupPassword> {
     int value = data['value'];
     print("Value is : $value");
     if (value == 1) {
-      PopUp();
-     /* var route = new MaterialPageRoute(
+     // PopUp();
+      var route = new MaterialPageRoute(
         builder: (BuildContext context) => new homepage(email: email),
       );
-      Navigator.of(context).push(route);*/
+      Navigator.of(context).push(route);
     }
   }
 

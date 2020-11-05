@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'View/screens/CheckEmail.dart';
-import 'View/screens/ForgotPassword.dart';
+import 'View/screens/sign/CheckEmail.dart';
 
-import 'View/screens/login_screen.dart';
+
+import 'View/screens/sign/login_screen.dart';
 
 
 

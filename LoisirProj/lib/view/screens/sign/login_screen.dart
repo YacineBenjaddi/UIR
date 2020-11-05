@@ -1,8 +1,10 @@
 import 'dart:convert';
-
+import 'dart:core';
+import 'package:intl/intl.dart';
 import 'package:LoisirProj/controller/utilities/ApiUrl.dart';
 import 'package:LoisirProj/controller/utilities/constants.dart';
 import 'package:LoisirProj/homepage.dart';
+import 'package:LoisirProj/model/User.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -24,8 +26,53 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
   String msg = '';
+  String id_user,nb_block,date_fin;
 
+  @override
+  void initState() {
+    super.initState();
+   getId();
+   getIdBlack();
+  }
+  Future<List<User>> getId() async {
+    var msg = "";
+    final response = await http.post(ApiUrl.getOne, body: {
+      "email": user.text,
+    });
+    print("getIIIIIIIIIIIIIIIIIIID");
+    var datauser = json.decode(response.body);
+    if (datauser.length > 0) {
+      setState(() {
+        print(datauser);
+
+        id_user = datauser[0]['id_user'];
+      });
+    }
+    return datauser;
+  }
+
+  Future<List<User>> getIdBlack() async {
+    var msg = "";
+    final response = await http.post(ApiUrl.getOneBlack, body: {
+      "id_user": id_user,
+    });
+    var datauser = json.decode(response.body);
+    print("getBlackkkkkkkkkkkk $id_user");
+    if (datauser.length > 0) {
+
+      nb_block = datauser[0]['nb_block'];
+      date_fin = datauser[0]['date_fin_block'];
+      print("$date_fin $nb_block");
+
+
+    }else{
+      date_fin='1900-01-01';
+    }
+    return datauser;
+  }
   Future<List> _login() async {
+
+
     print("***********************");
     print(user.text);
     print(pass.text);
@@ -45,16 +92,33 @@ class _LoginScreenState extends State<LoginScreen> {
 
       });
     }
+
     if (datauser[0]['profile'] == 'User' ) {
-      PopUp();
+
+      final DateTime now = DateTime.now();
+      final DateFormat formatter = DateFormat('yyyy-MM-dd');
+      final String formatted = formatter.format(now);
+      print(formatted);
+      print(date_fin);
+      final difference = now.difference(DateTime.parse(date_fin)).inDays;
+      print("looooooooooooooooooooool $difference");
+      if(int.parse(nb_block)>2){
+      PopUp_Suspendu();
+      }else if(difference<0){
+       PopUp_Block_temporory();
+      }else if(int.parse(datauser[0]['penalty'])<3){
       var route = new MaterialPageRoute(
         builder: (BuildContext context) => new homepage(email:user.text),
       );
-      Navigator.of(context).push(route);
+      Navigator.of(context).push(route);}
     }
 
     return datauser;
   }
+
+
+
+
   int PopUp_Login_Fail() {
     showDialog(
         context: context,
@@ -81,18 +145,17 @@ class _LoginScreenState extends State<LoginScreen> {
           );
         });
   }
-
-  int PopUp() {
+  int PopUp_Block_temporory() {
     showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text(" Message log",
+            title: Text(" ERROR",
                 style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.normal,
                     fontFamily: 'Montserrat')),
-            content: Text("Login correct",
+            content: Text("your account is blocked for a while",
                 style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.normal,
@@ -108,6 +171,33 @@ class _LoginScreenState extends State<LoginScreen> {
           );
         });
   }
+  int PopUp_Suspendu() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(" ERROR",
+                style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'Montserrat')),
+            content: Text("your account is susspendu",
+                style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'Montserrat')),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+
   String Email,Pass;
   var key = new GlobalKey<FormState>();
  // var key1 = new GlobalKey<FormState>();
@@ -116,6 +206,11 @@ class _LoginScreenState extends State<LoginScreen> {
    // print(form);
     if(form.validate()){
       form.save();
+      setState(() {
+        getId();
+        getIdBlack();
+
+      });
       _login();
     }
   }

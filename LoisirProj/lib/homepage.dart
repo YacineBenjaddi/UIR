@@ -4,9 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-
-import 'test.dart';
-
 int _selectedIndex = 0;
 const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
@@ -42,12 +39,7 @@ class homepageState extends State<homepage> {
       markerId: MarkerId('piscine'),
       position: LatLng(33.985081, -6.722919),
 
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SecondRoute()),
-        );
-      },
+
 
       infoWindow: InfoWindow(title: 'Piscine'),
       icon: BitmapDescriptor.defaultMarkerWithHue(
