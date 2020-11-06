@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'file:///C:/src/UIR/LoisirProj/lib/view/creneau_foot/creneaux.dart';
 import 'package:LoisirProj/view/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -140,10 +141,9 @@ class homepageState extends State<homepage> {
 
 
      ProfilePage(email:widget.email),
-      Text(
-        'Index 2: Page nan',
-        style: optionStyle,
-      ),
+
+        creneaux()
+
     ];
     return new Scaffold(
       body:Center(
@@ -163,7 +163,7 @@ class homepageState extends State<homepage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.add_outlined),
-            label: 'NAN',
+            label: 'Creneaux',
           ),
         ],
         currentIndex: _selectedIndex,

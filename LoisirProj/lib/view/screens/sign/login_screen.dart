@@ -27,13 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   String msg = '';
   String id_user,nb_block,date_fin;
-
-  @override
-  void initState() {
-    super.initState();
-   getId();
-   getIdBlack();
-  }
+  int difference;
   Future<List<User>> getId() async {
     var msg = "";
     final response = await http.post(ApiUrl.getOne, body: {
@@ -46,13 +40,13 @@ class _LoginScreenState extends State<LoginScreen> {
         print(datauser);
 
         id_user = datauser[0]['id_user'];
+        getIdBlack();
       });
     }
     return datauser;
   }
 
   Future<List<User>> getIdBlack() async {
-    var msg = "";
     final response = await http.post(ApiUrl.getOneBlack, body: {
       "id_user": id_user,
     });
@@ -63,15 +57,15 @@ class _LoginScreenState extends State<LoginScreen> {
       nb_block = datauser[0]['nb_block'];
       date_fin = datauser[0]['date_fin_block'];
       print("$date_fin $nb_block");
-
-
+      _login();
     }else{
+      nb_block='0';
       date_fin='1900-01-01';
+      _login();
     }
     return datauser;
   }
   Future<List> _login() async {
-
 
     print("***********************");
     print(user.text);
@@ -100,13 +94,14 @@ class _LoginScreenState extends State<LoginScreen> {
       final String formatted = formatter.format(now);
       print(formatted);
       print(date_fin);
-      final difference = now.difference(DateTime.parse(date_fin)).inDays;
+      difference = now.difference(DateTime.parse(date_fin)).inDays;
       print("looooooooooooooooooooool $difference");
       if(int.parse(nb_block)>2){
       PopUp_Suspendu();
       }else if(difference<0){
        PopUp_Block_temporory();
       }else if(int.parse(datauser[0]['penalty'])<3){
+        print('rouuuuuuuuuuuuuuuuuuute');
       var route = new MaterialPageRoute(
         builder: (BuildContext context) => new homepage(email:user.text),
       );
@@ -206,12 +201,8 @@ class _LoginScreenState extends State<LoginScreen> {
    // print(form);
     if(form.validate()){
       form.save();
-      setState(() {
-        getId();
-        getIdBlack();
+      getId();
 
-      });
-      _login();
     }
   }
 
@@ -219,7 +210,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
   Widget _buildPasswordTF() {
+
     return SingleChildScrollView(
+
       scrollDirection: Axis.vertical,
       physics: ClampingScrollPhysics(),
 
@@ -310,7 +303,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
   Widget _buildForgotPassword() {
+
     return Container(
+
       height: 20.0,
 
       child: Row(
@@ -424,7 +419,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
+
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
         child: GestureDetector(
