@@ -1,14 +1,19 @@
 import 'dart:async';
+import 'package:LoisirProj/model/Loisir.dart';
 import 'package:LoisirProj/view/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 
-import 'test.dart';
+import 'controller/utilities/ApiUrl.dart';
+import 'view/info.dart';
 
 int _selectedIndex = 0;
 const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+List<Loisir> _loisirs = [];
+Set<Marker> marks;
 
 class homepage extends StatefulWidget {
   final String email;
@@ -20,6 +25,37 @@ class homepage extends StatefulWidget {
 }
 
 class homepageState extends State<homepage> {
+
+  @override
+  void initState(){
+    _getLoisirs();
+
+  }
+  Future<List<Loisir>> _getLoisirs() async{
+
+    final response = await http.get(ApiUrl.getAllLoisir);
+
+      final List fetchedData = json.decode(response.body);
+      print("getOneLoisir $fetchedData");
+      print("Halllllllllllllllllooooooooooooooooo"+fetchedData.toString());
+
+      final List<Loisir> fetchedLoisir = [];
+    fetchedData.forEach((lois) {
+      Loisir loisirs = Loisir(
+          id_loisir: lois["id_loisir"],
+          nom: lois["nom"],
+          description: lois["description"],
+          latitude:lois["latitude"],
+          longitude: lois["longitude"],
+      );
+
+      fetchedLoisir.add(loisirs);
+    });
+
+      //_markers = fetchedLoisir;
+       _loisirs=fetchedLoisir;
+
+  }
 
   Completer<GoogleMapController> _controller = Completer();
 
@@ -37,71 +73,7 @@ class homepageState extends State<homepage> {
 
 
   Widget _buildGoogleMap(BuildContext context) {
-
-    Marker PiscineMarker = Marker(
-      markerId: MarkerId('piscine'),
-      position: LatLng(33.985081, -6.722919),
-
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SecondRoute()),
-        );
-      },
-
-      infoWindow: InfoWindow(title: 'Piscine'),
-      icon: BitmapDescriptor.defaultMarkerWithHue(
-        BitmapDescriptor.hueAzure,
-      ),
-    );
-
-    Marker Basket1Marker = Marker(
-      markerId: MarkerId('basket 1'),
-      position: LatLng(33.984722, -6.722662),
-      infoWindow: InfoWindow(title: 'Basket 1'),
-      icon: BitmapDescriptor.defaultMarkerWithHue(
-        BitmapDescriptor.hueOrange,
-      ),
-    );
-
-    Marker MiniFootMarker = Marker(
-      markerId: MarkerId('minifoot'),
-      position: LatLng(33.984894, -6.722248),
-      infoWindow: InfoWindow(title: 'MiniFoot'),
-      icon: BitmapDescriptor.defaultMarkerWithHue(
-        BitmapDescriptor.hueBlue,
-      ),
-
-    );
-
-
-/*Marker Basket2Marker = Marker(
-  markerId: MarkerId('basket 1'),
-  position: LatLng(33.984722, -6.722662),
-  infoWindow: InfoWindow(title: 'Basket 2'),
-  icon: BitmapDescriptor.defaultMarkerWithHue(
-    BitmapDescriptor.hueViolet,
-  ),
-);*/
-
-    Marker Tennis1Marker = Marker(
-      markerId: MarkerId('tennis 1'),
-      onTap: () => {},
-      position: LatLng(33.984440, -6.722974),
-      infoWindow: InfoWindow(title: 'Tennis 1'),
-      icon: BitmapDescriptor.defaultMarkerWithHue(
-        BitmapDescriptor.hueYellow,
-      ),
-    );
-
-    Marker SalleDeMuscuMarker = Marker(
-      markerId: MarkerId('sallemuscu'),
-      position: LatLng(33.986215, -6.721950),
-      infoWindow: InfoWindow(title: 'Gym'),
-      icon: BitmapDescriptor.defaultMarkerWithHue(
-        BitmapDescriptor.hueRed,
-      ),
-    );
+    _getLoisirs();
 
     return Container(
       height: MediaQuery.of(context).size.height,
@@ -122,6 +94,7 @@ class homepageState extends State<homepage> {
         trafficEnabled: false,
 
         onMapCreated: (GoogleMapController controller) {
+          marks=Set<Marker>();
           _controller.complete(controller);
           controller.moveCamera(CameraUpdate.newCameraPosition(_uirinit));
           Timer _timer = new Timer(const Duration(milliseconds: 1500), () {
@@ -129,10 +102,25 @@ class homepageState extends State<homepage> {
               controller.animateCamera(CameraUpdate.newCameraPosition(_uir));
             });
           });
+          _loisirs.forEach((loi) {
+            Marker mark=new Marker(
+              markerId: MarkerId(loi.id_loisir),
+              position: LatLng(double.parse(loi.latitude),double.parse(loi.longitude)),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => InfoPage(id_loisir:loi.id_loisir)),
+                );
+              },
+              infoWindow: InfoWindow(title: loi.nom),
+              icon: BitmapDescriptor.defaultMarkerWithHue(
+                BitmapDescriptor.hueBlue,
+              ),
+            );
+            marks.add(mark);
+          });
         },
-        markers: {
-          PiscineMarker,MiniFootMarker,Basket1Marker,Tennis1Marker,SalleDeMuscuMarker
-        },
+        markers: marks,
       ),
     );
   }
@@ -142,6 +130,7 @@ class homepageState extends State<homepage> {
     List<Widget> _widgetOptions = <Widget>[
       Stack(
         children: <Widget>[
+
           _buildGoogleMap(context),
         ],
       ),

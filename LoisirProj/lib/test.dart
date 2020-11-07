@@ -1,77 +1,74 @@
+import 'package:LoisirProj/model/Loisir.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-//import 'package:google_sign_in/google_sign_in.dart';
-import 'package:mailer/mailer.dart';
-import 'package:mailer/smtp_server.dart';
 import 'package:toast/toast.dart';
+import 'controller/utilities/ApiUrl.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-class SecondRoute extends StatelessWidget {
+
+
+class LoisirPage extends StatefulWidget {
+  final String id_loisir;
+
+  LoisirPage({this.id_loisir});
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Second Route"),
-      ),
-      body: Center(
-        child: SendMailFromLocalHost(),
-      ),
-    );
+  _LoisirPage createState() => _LoisirPage();
+}
+
+class _LoisirPage extends State<LoisirPage> {
+  var id_loisir,nom,description,latitude,longitude;
+
+  @override
+  void initState(){
+    id_loisir=widget.id_loisir;
+    nom="";
+    description="";
+    latitude="";
+    longitude="";
+    _getOneLoisir();
+
   }
-}
+
+  Future<List<Loisir>> _getOneLoisir() async {
+    var msg = "";
+    print("getOneLoisir $id_loisir");
+    final response = await http.post(ApiUrl.getLoisir, body: {
+      "id_loisir": id_loisir,
+    });
+    var dataloisir = json.decode(response.body);
 
 
-class SendMailFromLocalHost extends StatefulWidget {
-  @override
-  _SendMailFromLocalHostState createState() => _SendMailFromLocalHostState();
-}
 
-class _SendMailFromLocalHostState extends State<SendMailFromLocalHost> {
-
-  sendMail() async {
-    String username = "tetsuyakuro13@gmail.com";
-    String password = "tetsuyakuro123";//passsword
-
-    final smtpServer = gmail(username, password);
-    // Creating the Gmail server
-
-    // Create our email message.
-    final message = Message()
-      ..from = Address(username)
-      ..recipients.add('yassine.benjaddi@uir.ac.ma') //recipent email
-    //..ccRecipients.addAll(['destCc1@example.com', 'destCc2@example.com']) //cc Recipents emails
-    //..bccRecipients.add(Address('bccAddress@example.com')) //bcc Recipents emails
-      ..subject =
-          'Subject : ${DateTime.now()}' //subject of the email
-    //..text =
-    //'This is the plain text.\nThis is line 2 of the text part.'
-      ..html =
-          "<h3>Hallllllllloooooooooooooooooooo</h3>\n<p></p>"; //body of the email
-
-    try {
-      final sendReport = await send(message, smtpServer);
-      showToast('Message Send Check your mail',gravity: Toast.CENTER,duration: 3);
-      print('Message sent: ' +
-          sendReport.toString()); //print if the email is sent
-    } on MailerException catch (e) {
-      print('Message not sent. \n' +
-          e.toString()); //print if the email is not sent
-      // e.toString() will show why the email is not sending
+    if (dataloisir.length == 0) {
+      setState(() {
+        msg = "loisir not found";
+      });
     }
+
+    if (dataloisir.length > 0) {
+      setState(() {
+        print(dataloisir);
+        id_loisir = dataloisir[0]['id_loisir'];
+        nom = dataloisir[0]['nom'];
+        description = dataloisir[0]['description'];
+        latitude = dataloisir[0]['latitude'];
+        longitude = dataloisir[0]['longitude'];
+      });
+    }
+    return dataloisir;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Fluter Send Mail '),
+        title: Text('Text '),
       ),
       body: Center(
         child: MaterialButton(
           color: Colors.purple,
-          child: Text('Send Mail',style: TextStyle(color: Colors.white),),
-          onPressed: () {
-            sendMail();
-          },
+          child: Text('$nom and $description and $longitude and $latitude'),
         ),
       ),
     );
