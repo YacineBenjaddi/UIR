@@ -3,13 +3,14 @@ import 'dart:core';
 import 'package:intl/intl.dart';
 import 'package:LoisirProj/controller/utilities/ApiUrl.dart';
 import 'package:LoisirProj/controller/utilities/constants.dart';
-import 'package:LoisirProj/homepage.dart';
+
 import 'package:LoisirProj/model/User.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:http/http.dart' as http;
 
+import '../../homepage.dart';
 import 'SignupEmail.dart';
 
 

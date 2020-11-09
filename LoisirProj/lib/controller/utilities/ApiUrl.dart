@@ -1,6 +1,6 @@
 class ApiUrl{
-  static String ip="http://192.168.0.163/Test/";
-  static String getFoot = ip+'getFoot.php';
+  static String ip="http://192.168.0.163/";
+  static String getFoot = ip+'Test/getFoot.php';
   static String submit = 'http://192.168.0.163/Test/submit.php';
   static String validate = 'http://192.168.0.163/Test/validate.php';
   static String getOne = 'http://192.168.0.163/Test/get.php';
@@ -13,6 +13,8 @@ class ApiUrl{
   static String signInGoogle = 'http://192.168.0.163/Test/google/registerGoogle.php';
   static String get = "http://192.168.0.163/Test/comments.php";
   static String add = "http://192.168.0.163/Test/CommentDB.php";
+  static String getLoisir = ip+'Test/getLoisir.php';
+  static String getAllLoisir = ip+'Test/getAllLoisir.php';
   static const CREATE_TABLE_ACTION = 'CREATE_TABLE';
   static const GET_ALL_ACTION = 'GET_ALL';
   static const ADD_USER_ACTION = 'ADD_USER';

@@ -27,6 +27,7 @@ dependencies:
   flutter:
     sdk: flutter
   sliding_up_panel: ^1.0.0
+  carousel_slider: ^2.3.1
 
 
 

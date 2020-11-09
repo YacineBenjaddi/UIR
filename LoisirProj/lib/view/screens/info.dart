@@ -1,73 +1,81 @@
 import 'dart:convert';
 
 import 'package:LoisirProj/controller/utilities/ApiUrl.dart';
-import 'package:LoisirProj/model/User.dart';
+import 'package:LoisirProj/model/Loisir.dart';
+import 'package:LoisirProj/view/creneau_foot/creneaux.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'package:http/http.dart' as http;
 
-class ProfilePage extends StatefulWidget {
-  final String email;
+class InfoPage extends StatefulWidget {
+  final String id_loisir;
 
-  ProfilePage({this.email});
+
+  InfoPage({this.id_loisir});
+
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  _InfoPageState createState() => _InfoPageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _InfoPageState extends State<InfoPage> {
   bool _isOpen = false;
   PanelController _panelController = PanelController();
-  var id,Fname,Lname,email,gender,password,code, year, branch, pinalite;
+
+  List imgList = [
+    'https://images.unsplash.com/photo-1502117859338-fd9daa518a9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
+    'https://images.unsplash.com/photo-1554321586-92083ba0a115?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
+    'https://images.unsplash.com/photo-1536679545597-c2e5e1946495?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
+    'https://images.unsplash.com/photo-1543922596-b3bbaba80649?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
+    'https://images.unsplash.com/photo-1502943693086-33b5b1cfdf2f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=668&q=80'
+  ];
+  CarouselSlider carouselSlider;
+  int _current = 0;
+
+  var id_loisir,nom,description,latitude,longitude;
 
   @override
   void initState(){
-    id="";
-    Fname="";
-    Lname="";
-    email=widget.email;
-    gender="";
-    password="";
-    code="";
-    year="";
-    branch="";
-    pinalite="";
-    _getOne();
+    id_loisir=widget.id_loisir;
+    nom="";
+    description="";
+    latitude="";
+    longitude="";
+    _getOneLoisir();
 
   }
-  Future<List<User>> _getOne() async {
+
+  Future<List<Loisir>> _getOneLoisir() async {
     var msg = "";
-    print("getOneUser $email");
-    final response = await http.post(ApiUrl.getOne, body: {
-      "email": email,
+    print("getOneLoisir $id_loisir");
+    final response = await http.post(ApiUrl.getLoisir, body: {
+      "id_loisir": id_loisir,
     });
-    var datauser = json.decode(response.body);
+    var dataloisir = json.decode(response.body);
 
 
 
-    if (datauser.length == 0) {
+    if (dataloisir.length == 0) {
       setState(() {
-        msg = "user not found";
+        msg = "loisir not found";
       });
     }
 
-    if (datauser.length > 0) {
+    if (dataloisir.length > 0) {
       setState(() {
-        print(datauser);
-        id = datauser[0]['id_user'];
-        Lname = datauser[0]['last_name'];
-        Fname = datauser[0]['first_name'];
-        email = datauser[0]['email'];
-        password = datauser[0]['password'];
-        code = datauser[0]['code'];
-        gender = datauser[0]['gender'];
-        year = datauser[0]['year'];
-        branch = datauser[0]['branch'];
-        pinalite = datauser[0]['penalty'];
+        print(dataloisir);
+        id_loisir = dataloisir[0]['id_loisir'];
+        nom = dataloisir[0]['nom'];
+        description = dataloisir[0]['description'];
+        latitude = dataloisir[0]['latitude'];
+        longitude = dataloisir[0]['longitude'];
       });
     }
-    return datauser;
+    return dataloisir;
   }
+
+
   /// **********************************************
   /// LIFE CYCLE METHODS
   /// **********************************************
@@ -78,17 +86,48 @@ class _ProfilePageState extends State<ProfilePage> {
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          FractionallySizedBox(
-            alignment: Alignment.topCenter,
-            heightFactor: 0.7,
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/iconephoto.jpg'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+
+          carouselSlider = CarouselSlider(
+            options: CarouselOptions(
+            height: 650.0,
+            initialPage: 0,
+
+            autoPlay: true,
+            reverse: false,
+            enableInfiniteScroll: true,
+            autoPlayInterval: Duration(seconds: 2),
+            autoPlayAnimationDuration: Duration(milliseconds: 2000),
+           pauseAutoPlayOnTouch: true,
+            scrollDirection: Axis.horizontal,
+           onPageChanged: (index, reason) => {
+           setState(() {
+           _current = index;
+           })
+           },
+           /* onPageChanged: (index) {
+              setState(() {
+                _current = index;
+              });
+            },*/
+      ),
+            items: imgList.map((imgUrl) {
+              return Builder(
+                builder: (BuildContext context) {
+                  return Container(
+
+                    width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.symmetric(vertical: 5.0),
+                    decoration: BoxDecoration(
+                      color: Colors.blueAccent,
+                    ),
+                    child: Image.network(
+                      imgUrl,
+                      fit: BoxFit.fill,
+                    ),
+                  );
+                },
+              );
+            }).toList(),
           ),
 
           FractionallySizedBox(
@@ -173,7 +212,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Visibility(
+      /*  Visibility(
           visible: !_isOpen,
           child: Expanded(
             child: OutlineButton(
@@ -182,8 +221,9 @@ class _ProfilePageState extends State<ProfilePage> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30)),
               child: Text(
-                'RESERVATIONS',
+                'MORE INFO',
                 style: TextStyle(
+                  color: Colors.blue,
                   fontFamily: 'NimbusSanL',
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
@@ -191,7 +231,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
           ),
-        ),
+        ),*/
         Visibility(
           visible: !_isOpen,
           child: SizedBox(
@@ -206,16 +246,17 @@ class _ProfilePageState extends State<ProfilePage> {
                   ? (MediaQuery.of(context).size.width - (2 * hPadding)) / 1.6
                   : double.infinity,
               child: FlatButton(
-                onPressed: () => print('edit password'),
+
+                onPressed: () => _reserver(),
                 color: Colors.blue,
                 textColor: Colors.white,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30)),
                 child: Text(
-                  'EDIT PASSWORD',
+                  '+',
                   style: TextStyle(
                     fontFamily: 'NimbusSanL',
-                    fontSize: 12,
+                    fontSize: 30,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -233,33 +274,14 @@ class _ProfilePageState extends State<ProfilePage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        _infoCell(title: 'User number', value: "$code"),
-
-        Container(
-          width: 1,
-          height: 40,
-          color: Colors.grey,
-        ),
-        _infoCell(title: 'Number of penalty', value: "$pinalite"),
+        _infoCell(value: "$description"),
       ],
     );
   }
 
-  /// Info Cells
-  Column _infoCell({String title, String value}) {
+  Column _infoCell({String value}) {
     return Column(
       children: <Widget>[
-        Text(
-          title,
-          style: TextStyle(
-            fontFamily: 'OpenSans',
-            fontWeight: FontWeight.w300,
-            fontSize: 14,
-          ),
-        ),
-        SizedBox(
-          height: 8,
-        ),
         Text(
           value,
           style: TextStyle(
@@ -277,34 +299,38 @@ class _ProfilePageState extends State<ProfilePage> {
     return Column(
       children: <Widget>[
         Text(
-          "$Lname $Fname",
+          '$nom',
           style: TextStyle(
             fontFamily: 'NimbusSanL',
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
             fontSize: 30,
+            color: Colors.blue,
           ),
         ),
         SizedBox(
-          height: 8,
+          height: 10,
         ),
-        Text(
-          "$branch $year ",
-          style: TextStyle(
-            fontFamily: 'NimbusSanL',
-            fontStyle: FontStyle.italic,
-            fontSize: 16,
-          ),
-        ),
-        Text(
-          "$email",
-          style: TextStyle(
-            fontFamily: 'NimbusSanL',
-            fontStyle: FontStyle.italic,
-            fontSize: 16,
-          ),
-        ),
+
+
       ],
     );
   }
+
+  _reserver() {
+    if(id_loisir=='1'){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => creneaux()),
+        );
+    }else{
+      print("+ $id_loisir");
+    }  }
 }
+
+
+
+
+
+
+
 

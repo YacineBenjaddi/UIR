@@ -4,7 +4,8 @@ import 'package:LoisirProj/controller/utilities/ApiUrl.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../homepage.dart';
+
+import '../../homepage.dart';
 import 'login_screen.dart';
 
 class SignupPassword extends StatefulWidget {
