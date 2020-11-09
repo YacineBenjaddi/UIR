@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.0.1
 -- https://www.phpmyadmin.net/
 --
--- Hôte : 127.0.0.1
--- Généré le : sam. 07 nov. 2020 à 00:44
--- Version du serveur :  10.4.14-MariaDB
--- Version de PHP : 7.4.9
+-- Host: localhost
+-- Generation Time: Nov 09, 2020 at 01:35 AM
+-- Server version: 10.4.11-MariaDB
+-- PHP Version: 7.4.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -18,13 +19,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `uir`
+-- Database: `BDD`
 --
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `blacklist`
+-- Table structure for table `blacklist`
 --
 
 CREATE TABLE `blacklist` (
@@ -36,7 +37,7 @@ CREATE TABLE `blacklist` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Déchargement des données de la table `blacklist`
+-- Dumping data for table `blacklist`
 --
 
 INSERT INTO `blacklist` (`id`, `nb_block`, `date_block`, `date_fin_block`, `id_user`) VALUES
@@ -45,7 +46,7 @@ INSERT INTO `blacklist` (`id`, `nb_block`, `date_block`, `date_fin_block`, `id_u
 -- --------------------------------------------------------
 
 --
--- Structure de la table `horraire_basket`
+-- Table structure for table `horraire_basket`
 --
 
 CREATE TABLE `horraire_basket` (
@@ -56,7 +57,7 @@ CREATE TABLE `horraire_basket` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Déchargement des données de la table `horraire_basket`
+-- Dumping data for table `horraire_basket`
 --
 
 INSERT INTO `horraire_basket` (`id_basket`, `creneau`, `numero`, `dispo`) VALUES
@@ -68,7 +69,7 @@ INSERT INTO `horraire_basket` (`id_basket`, `creneau`, `numero`, `dispo`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `horraire_foot`
+-- Table structure for table `horraire_foot`
 --
 
 CREATE TABLE `horraire_foot` (
@@ -78,7 +79,7 @@ CREATE TABLE `horraire_foot` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Déchargement des données de la table `horraire_foot`
+-- Dumping data for table `horraire_foot`
 --
 
 INSERT INTO `horraire_foot` (`id_foot`, `creneau`, `disponibilite`) VALUES
@@ -88,7 +89,7 @@ INSERT INTO `horraire_foot` (`id_foot`, `creneau`, `disponibilite`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `horraire_piscine`
+-- Table structure for table `horraire_piscine`
 --
 
 CREATE TABLE `horraire_piscine` (
@@ -101,7 +102,7 @@ CREATE TABLE `horraire_piscine` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `horraire_tennis`
+-- Table structure for table `horraire_tennis`
 --
 
 CREATE TABLE `horraire_tennis` (
@@ -111,7 +112,7 @@ CREATE TABLE `horraire_tennis` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Déchargement des données de la table `horraire_tennis`
+-- Dumping data for table `horraire_tennis`
 --
 
 INSERT INTO `horraire_tennis` (`id_tennis`, `creneau`, `dispo`) VALUES
@@ -121,7 +122,32 @@ INSERT INTO `horraire_tennis` (`id_tennis`, `creneau`, `dispo`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `reservation_basket`
+-- Table structure for table `loisir`
+--
+
+CREATE TABLE `loisir` (
+  `id_loisir` int(11) NOT NULL,
+  `nom` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `latitude` varchar(255) NOT NULL,
+  `longitude` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `loisir`
+--
+
+INSERT INTO `loisir` (`id_loisir`, `nom`, `description`, `latitude`, `longitude`) VALUES
+(1, 'Mini Football', 'Disponible de 8h30-00h00', '33.984894', '-6.722248'),
+(2, 'Piscine', 'Disponible selon la semaine', '33.985081', ' -6.722919'),
+(3, 'Tennis', 'Disponible de 8h30-00h00', '33.984440', '-6.722974'),
+(4, 'Salle de Musculation', 'Disponible de 17h-22h', '33.986215', '-6.721950'),
+(5, 'Basket', 'Disponible de 8h30-00h00', '33.984722', '-6.722662');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reservation_basket`
 --
 
 CREATE TABLE `reservation_basket` (
@@ -134,7 +160,7 @@ CREATE TABLE `reservation_basket` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `reservation_piscine`
+-- Table structure for table `reservation_piscine`
 --
 
 CREATE TABLE `reservation_piscine` (
@@ -147,7 +173,7 @@ CREATE TABLE `reservation_piscine` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `reservation_tennis`
+-- Table structure for table `reservation_tennis`
 --
 
 CREATE TABLE `reservation_tennis` (
@@ -160,7 +186,7 @@ CREATE TABLE `reservation_tennis` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `resrvation_foot`
+-- Table structure for table `resrvation_foot`
 --
 
 CREATE TABLE `resrvation_foot` (
@@ -173,7 +199,7 @@ CREATE TABLE `resrvation_foot` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `user`
+-- Table structure for table `user`
 --
 
 CREATE TABLE `user` (
@@ -192,7 +218,7 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Déchargement des données de la table `user`
+-- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`id_user`, `first_name`, `last_name`, `email`, `password`, `penalty`, `gender`, `profile`, `reset`, `code`, `year`, `branch`) VALUES
@@ -203,140 +229,152 @@ INSERT INTO `user` (`id_user`, `first_name`, `last_name`, `email`, `password`, `
 (6, 'Wail', 'Lamhannad', 'test', '11', 0, 'male', 'User', 0, '157896', '5 eme', 'ISI');
 
 --
--- Index pour les tables déchargées
+-- Indexes for dumped tables
 --
 
 --
--- Index pour la table `blacklist`
+-- Indexes for table `blacklist`
 --
 ALTER TABLE `blacklist`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_user` (`id_user`);
 
 --
--- Index pour la table `horraire_basket`
+-- Indexes for table `horraire_basket`
 --
 ALTER TABLE `horraire_basket`
   ADD PRIMARY KEY (`id_basket`);
 
 --
--- Index pour la table `horraire_foot`
+-- Indexes for table `horraire_foot`
 --
 ALTER TABLE `horraire_foot`
   ADD PRIMARY KEY (`id_foot`);
 
 --
--- Index pour la table `horraire_piscine`
+-- Indexes for table `horraire_piscine`
 --
 ALTER TABLE `horraire_piscine`
   ADD PRIMARY KEY (`id_piscine`);
 
 --
--- Index pour la table `horraire_tennis`
+-- Indexes for table `horraire_tennis`
 --
 ALTER TABLE `horraire_tennis`
   ADD PRIMARY KEY (`id_tennis`);
 
 --
--- Index pour la table `reservation_basket`
+-- Indexes for table `loisir`
+--
+ALTER TABLE `loisir`
+  ADD PRIMARY KEY (`id_loisir`);
+
+--
+-- Indexes for table `reservation_basket`
 --
 ALTER TABLE `reservation_basket`
   ADD PRIMARY KEY (`id_res_basket`);
 
 --
--- Index pour la table `reservation_piscine`
+-- Indexes for table `reservation_piscine`
 --
 ALTER TABLE `reservation_piscine`
   ADD PRIMARY KEY (`id_res_piscine`);
 
 --
--- Index pour la table `reservation_tennis`
+-- Indexes for table `reservation_tennis`
 --
 ALTER TABLE `reservation_tennis`
   ADD PRIMARY KEY (`id_res_tennis`);
 
 --
--- Index pour la table `resrvation_foot`
+-- Indexes for table `resrvation_foot`
 --
 ALTER TABLE `resrvation_foot`
   ADD PRIMARY KEY (`id_res_foot`);
 
 --
--- Index pour la table `user`
+-- Indexes for table `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id_user`);
 
 --
--- AUTO_INCREMENT pour les tables déchargées
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT pour la table `blacklist`
+-- AUTO_INCREMENT for table `blacklist`
 --
 ALTER TABLE `blacklist`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT pour la table `horraire_basket`
+-- AUTO_INCREMENT for table `horraire_basket`
 --
 ALTER TABLE `horraire_basket`
   MODIFY `id_basket` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT pour la table `horraire_foot`
+-- AUTO_INCREMENT for table `horraire_foot`
 --
 ALTER TABLE `horraire_foot`
   MODIFY `id_foot` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT pour la table `horraire_piscine`
+-- AUTO_INCREMENT for table `horraire_piscine`
 --
 ALTER TABLE `horraire_piscine`
   MODIFY `id_piscine` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `horraire_tennis`
+-- AUTO_INCREMENT for table `horraire_tennis`
 --
 ALTER TABLE `horraire_tennis`
   MODIFY `id_tennis` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT pour la table `reservation_basket`
+-- AUTO_INCREMENT for table `loisir`
+--
+ALTER TABLE `loisir`
+  MODIFY `id_loisir` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `reservation_basket`
 --
 ALTER TABLE `reservation_basket`
   MODIFY `id_res_basket` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `reservation_piscine`
+-- AUTO_INCREMENT for table `reservation_piscine`
 --
 ALTER TABLE `reservation_piscine`
   MODIFY `id_res_piscine` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `reservation_tennis`
+-- AUTO_INCREMENT for table `reservation_tennis`
 --
 ALTER TABLE `reservation_tennis`
   MODIFY `id_res_tennis` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `resrvation_foot`
+-- AUTO_INCREMENT for table `resrvation_foot`
 --
 ALTER TABLE `resrvation_foot`
   MODIFY `id_res_foot` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `user`
+-- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
   MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- Contraintes pour les tables déchargées
+-- Constraints for dumped tables
 --
 
 --
--- Contraintes pour la table `blacklist`
+-- Constraints for table `blacklist`
 --
 ALTER TABLE `blacklist`
   ADD CONSTRAINT `blacklist_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`);
