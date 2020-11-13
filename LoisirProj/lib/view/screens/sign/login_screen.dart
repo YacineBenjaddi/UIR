@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:core';
+import 'package:flutter_session/flutter_session.dart';
 import 'package:intl/intl.dart';
 import 'package:LoisirProj/controller/utilities/ApiUrl.dart';
 import 'package:LoisirProj/controller/utilities/constants.dart';
@@ -9,8 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:http/http.dart' as http;
-
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../main.dart';
 import '../../homepage.dart';
+import '../../homepage.dart';
+
 import 'SignupEmail.dart';
 
 
@@ -29,30 +33,41 @@ class _LoginScreenState extends State<LoginScreen> {
   String msg = '';
   String id_user,nb_block,date_fin;
   int difference;
+
+  SharedPreferences logindata;
+  bool newuser;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    check_if_already_login();
+  }
+  void check_if_already_login() async {
+    logindata = await SharedPreferences.getInstance();
+    newuser = (logindata.getBool('login') ?? true);
+    print(newuser);
+    if (newuser == false) {
+      Navigator.pushReplacement(
+          context, new MaterialPageRoute(builder: (context) => homepage(email: user.text)));
+    }
+  }
+
+  @override
+  void dispose() {
+  // Clean up the controller when the widget is disposed.
+  user.dispose();
+  pass.dispose();
+  super.dispose();
+  }
+
   Future<List<User>> getId() async {
-    var msg = "";
     final response = await http.post(ApiUrl.getOne, body: {
       "email": user.text,
     });
-    print("getIIIIIIIIIIIIIIIIIIID");
     var datauser = json.decode(response.body);
-    if (datauser.length > 0) {
-      setState(() {
-        print(datauser);
 
-        id_user = datauser[0]['id_user'];
-        getIdBlack();
-      });
-    }
-    return datauser;
-  }
-
-  Future<List<User>> getIdBlack() async {
-    final response = await http.post(ApiUrl.getOneBlack, body: {
-      "id_user": id_user,
-    });
-    var datauser = json.decode(response.body);
-    print("getBlackkkkkkkkkkkk $id_user");
     if (datauser.length > 0) {
 
       nb_block = datauser[0]['nb_block'];
@@ -79,6 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     var datauser = json.decode(response.body);
 
+
     if (datauser.length == 0) {
 
       setState(() {
@@ -89,6 +105,8 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     if (datauser[0]['profile'] == 'User' ) {
+      logindata.setBool('login', false);
+      logindata.setString('username', user.text);
 
       final DateTime now = DateTime.now();
       final DateFormat formatter = DateFormat('yyyy-MM-dd');
@@ -96,17 +114,14 @@ class _LoginScreenState extends State<LoginScreen> {
       print(formatted);
       print(date_fin);
       difference = now.difference(DateTime.parse(date_fin)).inDays;
-      print("looooooooooooooooooooool $difference");
       if(int.parse(nb_block)>2){
       PopUp_Suspendu();
       }else if(difference<0){
        PopUp_Block_temporory();
       }else if(int.parse(datauser[0]['penalty'])<3){
-        print('rouuuuuuuuuuuuuuuuuuute');
-      var route = new MaterialPageRoute(
-        builder: (BuildContext context) => new homepage(email:user.text),
-      );
-      Navigator.of(context).push(route);}
+
+        Navigator.of(context).pushReplacementNamed("/home");
+      }
     }
 
     return datauser;
@@ -206,7 +221,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
     }
   }
-
 
 
 

@@ -4,10 +4,13 @@ import 'package:LoisirProj/model/Loisir.dart';
 import 'package:LoisirProj/view/profile.dart';
 import 'package:LoisirProj/view/screens/info.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_session/flutter_session.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+import 'screens/sign/login_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 int _selectedIndex = 0;
@@ -25,12 +28,22 @@ class homepage extends StatefulWidget {
 }
 
 class homepageState extends State<homepage> {
-
+  SharedPreferences logindata;
+  String username;
   @override
   void initState(){
     _getLoisirs();
-
+    initial();
   }
+  void initial() async {
+    logindata = await SharedPreferences.getInstance();
+    setState(() {
+      username = logindata.getString('username');
+    });
+  }
+
+
+
   Future<List<Loisir>> _getLoisirs() async{
 
     final response = await http.get(ApiUrl.getAllLoisir);
@@ -136,18 +149,28 @@ class homepageState extends State<homepage> {
       ),
 
 
-     ProfilePage(email:widget.email),
+     ProfilePage(email:username),
       Text(
         'Index 2: Page nan',
         style: optionStyle,
       ),
     ];
     return new Scaffold(
+      appBar: AppBar(
+        title: Text(""),
+        actions:  <Widget>[
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              logindata.setBool('login', true);
+              Navigator.pushReplacement(context,
+                  new MaterialPageRoute(builder: (context) => LoginScreen()));
+            },
+          )],),
       body:Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
-      appBar: AppBar(title: Text("Home Page"),
-      ),
+
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -158,10 +181,7 @@ class homepageState extends State<homepage> {
             icon: Icon(Icons.account_circle),
             label: 'Profile',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add_outlined),
-            label: 'NAN',
-          ),
+
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.blueAccent,

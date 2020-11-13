@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' ;
-
+import 'package:table_calendar/table_calendar.dart';
+import 'package:intl/intl.dart';
 class calendar extends StatelessWidget {
 @override
 Widget build(BuildContext context) {
@@ -25,10 +27,12 @@ DateTime _dateTime;
 @override
 Widget build(BuildContext context) {
 return Scaffold(
+
 body: Center(
 child: Column(
 mainAxisAlignment: MainAxisAlignment.center,
 children: <Widget>[
+
 Text(_dateTime == null ? 'Nothing has been picked yet' : _dateTime.toString()),
 RaisedButton(
 child: Text('Pick a date'),
@@ -45,7 +49,9 @@ _dateTime = date;
 });
 },
 )
-],
+
+
+  ],
 ),
 ),
 );

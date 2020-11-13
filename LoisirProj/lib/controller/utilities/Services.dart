@@ -35,7 +35,7 @@ class Services {
       return "error";
     }
   }*/
-
+/*
   static Future<String> updateUser(String id_user, String last_name,
       String first_name, String email, String password,String penalty,String gender, String profile) async {
     try {
@@ -60,7 +60,7 @@ class Services {
       return "error";
     }
   }
-
+*/
   /*
   static Future<String> updateReset(String email) async {
     try {
@@ -78,8 +78,8 @@ class Services {
     } catch (e) {
       return "error";
     }
-  }
-*/
+  }*/
+  /*
   static Future<String> deleteUser(String id_user) async {
     try {
       var map = Map<String, dynamic>();
@@ -96,7 +96,7 @@ class Services {
       return "error";
     }
   }
-
+*/
 /*
   //======================== Add reservatio =====================================
   static Future<String> addReservation(String id_user,String id_restaurant,String hour, String date_res) async {
