@@ -2,10 +2,10 @@
 -- version 5.0.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Nov 09, 2020 at 01:35 AM
--- Server version: 10.4.11-MariaDB
--- PHP Version: 7.4.3
+-- Hôte : 127.0.0.1
+-- Généré le : ven. 13 nov. 2020 à 17:41
+-- Version du serveur :  10.4.11-MariaDB
+-- Version de PHP : 7.4.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,34 +19,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `BDD`
+-- Base de données : `uir`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `blacklist`
---
-
-CREATE TABLE `blacklist` (
-  `id` int(11) NOT NULL,
-  `nb_block` int(11) DEFAULT NULL,
-  `date_block` date NOT NULL,
-  `date_fin_block` date NOT NULL,
-  `id_user` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `blacklist`
---
-
-INSERT INTO `blacklist` (`id`, `nb_block`, `date_block`, `date_fin_block`, `id_user`) VALUES
-(1, 2, '2020-11-01', '2020-11-04', 6);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `horraire_basket`
+-- Structure de la table `horraire_basket`
 --
 
 CREATE TABLE `horraire_basket` (
@@ -57,7 +36,7 @@ CREATE TABLE `horraire_basket` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `horraire_basket`
+-- Déchargement des données de la table `horraire_basket`
 --
 
 INSERT INTO `horraire_basket` (`id_basket`, `creneau`, `numero`, `dispo`) VALUES
@@ -69,7 +48,7 @@ INSERT INTO `horraire_basket` (`id_basket`, `creneau`, `numero`, `dispo`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `horraire_foot`
+-- Structure de la table `horraire_foot`
 --
 
 CREATE TABLE `horraire_foot` (
@@ -79,7 +58,7 @@ CREATE TABLE `horraire_foot` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `horraire_foot`
+-- Déchargement des données de la table `horraire_foot`
 --
 
 INSERT INTO `horraire_foot` (`id_foot`, `creneau`, `disponibilite`) VALUES
@@ -89,7 +68,7 @@ INSERT INTO `horraire_foot` (`id_foot`, `creneau`, `disponibilite`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `horraire_piscine`
+-- Structure de la table `horraire_piscine`
 --
 
 CREATE TABLE `horraire_piscine` (
@@ -102,7 +81,7 @@ CREATE TABLE `horraire_piscine` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `horraire_tennis`
+-- Structure de la table `horraire_tennis`
 --
 
 CREATE TABLE `horraire_tennis` (
@@ -112,7 +91,7 @@ CREATE TABLE `horraire_tennis` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `horraire_tennis`
+-- Déchargement des données de la table `horraire_tennis`
 --
 
 INSERT INTO `horraire_tennis` (`id_tennis`, `creneau`, `dispo`) VALUES
@@ -122,7 +101,7 @@ INSERT INTO `horraire_tennis` (`id_tennis`, `creneau`, `dispo`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `loisir`
+-- Structure de la table `loisir`
 --
 
 CREATE TABLE `loisir` (
@@ -134,7 +113,7 @@ CREATE TABLE `loisir` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `loisir`
+-- Déchargement des données de la table `loisir`
 --
 
 INSERT INTO `loisir` (`id_loisir`, `nom`, `description`, `latitude`, `longitude`) VALUES
@@ -147,7 +126,7 @@ INSERT INTO `loisir` (`id_loisir`, `nom`, `description`, `latitude`, `longitude`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `reservation_basket`
+-- Structure de la table `reservation_basket`
 --
 
 CREATE TABLE `reservation_basket` (
@@ -160,7 +139,7 @@ CREATE TABLE `reservation_basket` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `reservation_piscine`
+-- Structure de la table `reservation_piscine`
 --
 
 CREATE TABLE `reservation_piscine` (
@@ -173,7 +152,7 @@ CREATE TABLE `reservation_piscine` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `reservation_tennis`
+-- Structure de la table `reservation_tennis`
 --
 
 CREATE TABLE `reservation_tennis` (
@@ -186,7 +165,7 @@ CREATE TABLE `reservation_tennis` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `resrvation_foot`
+-- Structure de la table `resrvation_foot`
 --
 
 CREATE TABLE `resrvation_foot` (
@@ -199,7 +178,7 @@ CREATE TABLE `resrvation_foot` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Structure de la table `user`
 --
 
 CREATE TABLE `user` (
@@ -214,170 +193,151 @@ CREATE TABLE `user` (
   `reset` int(11) NOT NULL,
   `code` varchar(50) NOT NULL,
   `year` varchar(50) NOT NULL,
-  `branch` varchar(50) NOT NULL
+  `branch` varchar(50) NOT NULL,
+  `nb_block` int(11) NOT NULL,
+  `date_debut_block` date NOT NULL,
+  `date_fin_block` date NOT NULL,
+  `token` varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `user`
+-- Déchargement des données de la table `user`
 --
 
-INSERT INTO `user` (`id_user`, `first_name`, `last_name`, `email`, `password`, `penalty`, `gender`, `profile`, `reset`, `code`, `year`, `branch`) VALUES
-(1, 'rida', 'essadiki', 'rida.essadiki@uir.ac.ma', '123678', 1, 'male', 'User', 760581, '105180', '5 eme', 'ISI'),
-(3, 'yassine', 'benjaddi', 'yassine.benjaddi@uir.ac.ma', 'yass', 0, 'male', 'User', 78354, '123465', '5eme', 'ISI'),
-(4, 'manal', 'el ouardani', 'manal.elouardani@uir.ac.ma', '123000', 0, 'female', 'User', 0, '159786', '5 eme', 'ISI'),
-(5, 'Ilias', 'siyassi', 'ilias.siyassi@uir.ac.ma', '123455', 0, 'male', 'User', 0, '145786', '5 eme', 'ISI '),
-(6, 'Wail', 'Lamhannad', 'test', '11', 0, 'male', 'User', 0, '157896', '5 eme', 'ISI');
+INSERT INTO `user` (`id_user`, `first_name`, `last_name`, `email`, `password`, `penalty`, `gender`, `profile`, `reset`, `code`, `year`, `branch`, `nb_block`, `date_debut_block`, `date_fin_block`, `token`) VALUES
+(1, 'rida', 'essadiki', 'rida.essadiki@uir.ac.ma', '123678', 1, 'male', 'User', 760581, '105180', '5 eme', 'ISI', 0, '2020-11-02', '2020-11-02', 'aqwed3456mg'),
+(3, 'yassine', 'benjaddi', 'yassine.benjaddi@uir.ac.ma', 'yass', 0, 'male', 'User', 78354, '123465', '5eme', 'ISI', 0, '0000-00-00', '0000-00-00', 'jdg23vcikd'),
+(4, 'manal', 'el ouardani', 'manal.elouardani@uir.ac.ma', '123000', 0, 'female', 'User', 0, '159786', '5 eme', 'ISI', 0, '0000-00-00', '0000-00-00', ''),
+(5, 'Ilias', 'siyassi', 'ilias.siyassi@uir.ac.ma', '123455', 0, 'male', 'User', 0, '145786', '5 eme', 'ISI ', 0, '0000-00-00', '0000-00-00', ''),
+(6, 'Wail', 'Lamhannad', 'test', '11', 0, 'male', 'User', 0, '157896', '5 eme', 'ISI', 3, '2020-11-02', '2020-11-03', '');
 
 --
--- Indexes for dumped tables
+-- Index pour les tables déchargées
 --
 
 --
--- Indexes for table `blacklist`
---
-ALTER TABLE `blacklist`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_user` (`id_user`);
-
---
--- Indexes for table `horraire_basket`
+-- Index pour la table `horraire_basket`
 --
 ALTER TABLE `horraire_basket`
   ADD PRIMARY KEY (`id_basket`);
 
 --
--- Indexes for table `horraire_foot`
+-- Index pour la table `horraire_foot`
 --
 ALTER TABLE `horraire_foot`
   ADD PRIMARY KEY (`id_foot`);
 
 --
--- Indexes for table `horraire_piscine`
+-- Index pour la table `horraire_piscine`
 --
 ALTER TABLE `horraire_piscine`
   ADD PRIMARY KEY (`id_piscine`);
 
 --
--- Indexes for table `horraire_tennis`
+-- Index pour la table `horraire_tennis`
 --
 ALTER TABLE `horraire_tennis`
   ADD PRIMARY KEY (`id_tennis`);
 
 --
--- Indexes for table `loisir`
+-- Index pour la table `loisir`
 --
 ALTER TABLE `loisir`
   ADD PRIMARY KEY (`id_loisir`);
 
 --
--- Indexes for table `reservation_basket`
+-- Index pour la table `reservation_basket`
 --
 ALTER TABLE `reservation_basket`
   ADD PRIMARY KEY (`id_res_basket`);
 
 --
--- Indexes for table `reservation_piscine`
+-- Index pour la table `reservation_piscine`
 --
 ALTER TABLE `reservation_piscine`
   ADD PRIMARY KEY (`id_res_piscine`);
 
 --
--- Indexes for table `reservation_tennis`
+-- Index pour la table `reservation_tennis`
 --
 ALTER TABLE `reservation_tennis`
   ADD PRIMARY KEY (`id_res_tennis`);
 
 --
--- Indexes for table `resrvation_foot`
+-- Index pour la table `resrvation_foot`
 --
 ALTER TABLE `resrvation_foot`
   ADD PRIMARY KEY (`id_res_foot`);
 
 --
--- Indexes for table `user`
+-- Index pour la table `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id_user`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT pour les tables déchargées
 --
 
 --
--- AUTO_INCREMENT for table `blacklist`
---
-ALTER TABLE `blacklist`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `horraire_basket`
+-- AUTO_INCREMENT pour la table `horraire_basket`
 --
 ALTER TABLE `horraire_basket`
   MODIFY `id_basket` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `horraire_foot`
+-- AUTO_INCREMENT pour la table `horraire_foot`
 --
 ALTER TABLE `horraire_foot`
   MODIFY `id_foot` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `horraire_piscine`
+-- AUTO_INCREMENT pour la table `horraire_piscine`
 --
 ALTER TABLE `horraire_piscine`
   MODIFY `id_piscine` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `horraire_tennis`
+-- AUTO_INCREMENT pour la table `horraire_tennis`
 --
 ALTER TABLE `horraire_tennis`
   MODIFY `id_tennis` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `loisir`
+-- AUTO_INCREMENT pour la table `loisir`
 --
 ALTER TABLE `loisir`
   MODIFY `id_loisir` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `reservation_basket`
+-- AUTO_INCREMENT pour la table `reservation_basket`
 --
 ALTER TABLE `reservation_basket`
   MODIFY `id_res_basket` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `reservation_piscine`
+-- AUTO_INCREMENT pour la table `reservation_piscine`
 --
 ALTER TABLE `reservation_piscine`
   MODIFY `id_res_piscine` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `reservation_tennis`
+-- AUTO_INCREMENT pour la table `reservation_tennis`
 --
 ALTER TABLE `reservation_tennis`
   MODIFY `id_res_tennis` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `resrvation_foot`
+-- AUTO_INCREMENT pour la table `resrvation_foot`
 --
 ALTER TABLE `resrvation_foot`
   MODIFY `id_res_foot` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `user`
+-- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
   MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `blacklist`
---
-ALTER TABLE `blacklist`
-  ADD CONSTRAINT `blacklist_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
