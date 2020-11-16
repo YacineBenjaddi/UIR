@@ -1,5 +1,5 @@
 class ApiUrl{
-  static String url="http://192.168.1.100/";
+  static String url="http://192.168.1.12/";
 
   static String submit = url+'Test/submit.php';
   static String validate = url+'Test/validate.php';
@@ -14,6 +14,16 @@ class ApiUrl{
   static String add = url+'Test/CommentDB.php';
   static String getLoisir = url+'Test/getLoisir.php';
   static String getAllLoisir = url+'Test/getAllLoisir.php';
+  static String uploadImage = url+'Test/uploadimage.php';
+  static String getPhotosTerrains = url+'Test/getPhotosTerrains.php';
+
+
+
+  //Images Folder
+  static String imagesTerrain = url+'Test/images/Terrains/';
+  static String imagesProfiles = url+'Test/images/Profiles/';
+
+
 
   static const CREATE_TABLE_ACTION = 'CREATE_TABLE';
   static const GET_ALL_ACTION = 'GET_ALL';

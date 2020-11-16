@@ -25,6 +25,9 @@ dependencies:
   mailer: ^3.2.1
   http: ^0.12.2
   toast: ^0.1.5
+  image_picker: ^0.6.0+9
+  path_provider: "^0.4.1"
+  image: "^2.0.4"
   flutter:
     sdk: flutter
   sliding_up_panel: ^1.0.0

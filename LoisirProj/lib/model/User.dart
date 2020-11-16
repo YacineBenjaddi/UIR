@@ -1,5 +1,5 @@
 class User{
-  String id_user,code, first_name, last_name, email, gender, password, year, filiere, penality,profile;
+  String id_user,code, first_name, last_name, email, gender, password, year, filiere, penality,profile,photo;
 
   User({
       this.id_user,
@@ -12,7 +12,8 @@ class User{
       this.year,
       this.filiere,
       this.penality,
-      this.profile});
+      this.profile,
+  this.photo});
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id_user: json['id_user'] as String,
@@ -25,7 +26,8 @@ class User{
       year: json['year'] as String,
       filiere: json['filiere'] as String,
       penality: json['penality'] as String,
-      profile: json['profile'] as String
+      profile: json['profile'] as String,
+        photo:json['photo'] as String,
     );
   }
 }

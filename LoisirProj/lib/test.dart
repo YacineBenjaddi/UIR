@@ -1,81 +1,146 @@
-import 'package:LoisirProj/model/Loisir.dart';
-import 'package:flutter/material.dart';
-import 'package:toast/toast.dart';
-import 'controller/utilities/ApiUrl.dart';
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+
+import 'package:LoisirProj/controller/utilities/ApiUrl.dart';
+import 'package:async/async.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
+
+import 'package:path_provider/path_provider.dart';
+import 'package:image/image.dart' as Img;
+
+import 'dart:math' as Math;
 
 
 
-class LoisirPage extends StatefulWidget {
-  final String id_loisir;
+class MyHomePage extends StatefulWidget {
+  String email;
 
-  LoisirPage({this.id_loisir});
+  MyHomePage({this.email});
 
   @override
-  _LoisirPage createState() => _LoisirPage();
+  MyHomePageState createState() => MyHomePageState();
 }
 
-class _LoisirPage extends State<LoisirPage> {
-  var id_loisir,nom,description,latitude,longitude;
+class MyHomePageState extends State<MyHomePage> {
+  //
+  static final String uploadEndPoint =
+      ApiUrl.uploadImage;
+  Future<File> file;
+  String status = '';
+  String base64Image;
+  File tmpFile;
+  String errMessage = 'Error Uploading Image';
 
-  @override
-  void initState(){
-    id_loisir=widget.id_loisir;
-    nom="";
-    description="";
-    latitude="";
-    longitude="";
-    _getOneLoisir();
-
+  chooseImage() {
+    setState(() {
+      file = ImagePicker.pickImage(source: ImageSource.gallery);
+    });
+    setStatus('');
   }
 
-  Future<List<Loisir>> _getOneLoisir() async {
-    var msg = "";
-    print("getOneLoisir $id_loisir");
-    final response = await http.post(ApiUrl.getLoisir, body: {
-      "id_loisir": id_loisir,
+  setStatus(String message) {
+    setState(() {
+      status = message;
     });
-    var dataloisir = json.decode(response.body);
+  }
 
-
-
-    if (dataloisir.length == 0) {
-      setState(() {
-        msg = "loisir not found";
-      });
+  startUpload() {
+    setStatus('Uploading Image...');
+    if (null == tmpFile) {
+      setStatus(errMessage);
+      return;
     }
+    String fileName = tmpFile.path.split('/').last;
+    upload(fileName);
+  }
 
-    if (dataloisir.length > 0) {
-      setState(() {
-        print(dataloisir);
-        id_loisir = dataloisir[0]['id_loisir'];
-        nom = dataloisir[0]['nom'];
-        description = dataloisir[0]['description'];
-        latitude = dataloisir[0]['latitude'];
-        longitude = dataloisir[0]['longitude'];
-      });
-    }
-    return dataloisir;
+  upload(String fileName) {
+    http.post(uploadEndPoint, body: {
+      "image": base64Image,
+      "name": fileName,
+      "email":widget.email,
+    }).then((result) {
+      setStatus(result.statusCode == 200 ? result.body : errMessage);
+    }).catchError((error) {
+      setStatus(error);
+    });
+  }
+
+  Widget showImage() {
+    return FutureBuilder<File>(
+      future: file,
+      builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done &&
+            null != snapshot.data) {
+          tmpFile = snapshot.data;
+          base64Image = base64Encode(snapshot.data.readAsBytesSync());
+          return Flexible(
+            child: Image.file(
+              snapshot.data,
+              fit: BoxFit.fill,
+            ),
+          );
+        } else if (null != snapshot.error) {
+          return const Text(
+            'Error Picking Image',
+            textAlign: TextAlign.center,
+          );
+        } else {
+          return const Text(
+            'No Image Selected',
+            textAlign: TextAlign.center,
+          );
+        }
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Text '),
-      ),
-      body: Center(
-        child: MaterialButton(
-          color: Colors.purple,
-          child: Text('$nom and $description and $longitude and $latitude'),
+      body: Container(
+        padding: EdgeInsets.all(30.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            OutlineButton(
+              onPressed: chooseImage,
+              child: Text('Choose Image'),
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+            showImage(),
+            SizedBox(
+              height: 20.0,
+            ),
+            OutlineButton(
+              onPressed: startUpload,
+              child: Text('Upload Image'),
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+            Text(
+              status,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.green,
+                fontWeight: FontWeight.w500,
+                fontSize: 20.0,
+              ),
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+          ],
         ),
       ),
     );
-  }
-
-  void showToast(String msg, {int duration, int gravity}){
-    Toast.show(msg, context,duration: duration,gravity: gravity);
   }
 }
 

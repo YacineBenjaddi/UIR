@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:LoisirProj/model/Loisir.dart';
+import 'package:LoisirProj/test.dart';
 import 'package:LoisirProj/view/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -137,10 +138,7 @@ class homepageState extends State<homepage> {
 
 
      ProfilePage(email:widget.email),
-      Text(
-        'Index 2: Page nan',
-        style: optionStyle,
-      ),
+      MyHomePage(email:widget.email),
     ];
     return new Scaffold(
       body:Center(

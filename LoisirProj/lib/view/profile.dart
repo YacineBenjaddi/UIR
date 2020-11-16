@@ -18,7 +18,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   bool _isOpen = false;
   PanelController _panelController = PanelController();
-  var id,Fname,Lname,email,gender,password,code, year, branch, pinalite;
+  var id,Fname,Lname,email,gender,password,code, year, branch, pinalite,photo;
 
   @override
   void initState(){
@@ -32,6 +32,7 @@ class _ProfilePageState extends State<ProfilePage> {
     year="";
     branch="";
     pinalite="";
+    photo="";
     _getOne();
 
   }
@@ -64,6 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
         year = datauser[0]['year'];
         branch = datauser[0]['branch'];
         pinalite = datauser[0]['penalty'];
+        photo = datauser[0]['photo'];
       });
     }
     return datauser;
@@ -82,12 +84,13 @@ class _ProfilePageState extends State<ProfilePage> {
             alignment: Alignment.topCenter,
             heightFactor: 0.7,
             child: Container(
-              decoration: BoxDecoration(
+              child: Image.network(ApiUrl.imagesProfiles+photo),
+        /*      decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/images/iconephoto.jpg'),
+                 // image: AssetImage(Image.network(ApiUrl)),
                   fit: BoxFit.cover,
                 ),
-              ),
+              ),*/
             ),
           ),
 
