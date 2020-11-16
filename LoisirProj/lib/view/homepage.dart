@@ -3,14 +3,13 @@ import 'package:LoisirProj/controller/utilities/ApiUrl.dart';
 import 'package:LoisirProj/model/Loisir.dart';
 import 'package:LoisirProj/view/profile.dart';
 import 'package:LoisirProj/view/screens/info.dart';
+import 'package:LoisirProj/view/screens/sign/login_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_session/flutter_session.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
-import 'screens/sign/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 
 
 int _selectedIndex = 0;
@@ -31,28 +30,29 @@ class homepageState extends State<homepage> {
   SharedPreferences logindata;
   String username;
   @override
-  void initState(){
-    _getLoisirs();
+  void initState() {
+    // TODO: implement initState
+    super.initState();
     initial();
+
   }
   void initial() async {
     logindata = await SharedPreferences.getInstance();
     setState(() {
       username = logindata.getString('username');
+      _getLoisirs();
     });
   }
-
-
 
   Future<List<Loisir>> _getLoisirs() async{
 
     final response = await http.get(ApiUrl.getAllLoisir);
 
-      final List fetchedData = json.decode(response.body);
-      print("getOneLoisir $fetchedData");
-      print("Halllllllllllllllllooooooooooooooooo"+fetchedData.toString());
+    final List fetchedData = json.decode(response.body);
+    print("getOneLoisir $fetchedData");
+    print("Halllllllllllllllllooooooooooooooooo"+fetchedData.toString());
 
-      final List<Loisir> fetchedLoisir = [];
+    final List<Loisir> fetchedLoisir = [];
     fetchedData.forEach((lois) {
       Loisir loisirs = Loisir(
           id_loisir: lois["id_loisir"],
@@ -60,13 +60,14 @@ class homepageState extends State<homepage> {
           description: lois["description"],
           latitude:lois["latitude"],
           longitude: lois["longitude"],
+          type: lois["type"]
       );
 
       fetchedLoisir.add(loisirs);
     });
 
-      //_markers = fetchedLoisir;
-       _loisirs=fetchedLoisir;
+    //_markers = fetchedLoisir;
+    _loisirs=fetchedLoisir;
 
   }
 
@@ -122,7 +123,7 @@ class homepageState extends State<homepage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => InfoPage(id_loisir:loi.id_loisir)),
+                  MaterialPageRoute(builder: (context) => InfoPage(id_loisir:loi.id_loisir,type: loi.type)),
                 );
               },
               infoWindow: InfoWindow(title: loi.nom),
@@ -149,7 +150,7 @@ class homepageState extends State<homepage> {
       ),
 
 
-     ProfilePage(email:username),
+      ProfilePage(email:username),
       Text(
         'Index 2: Page nan',
         style: optionStyle,
@@ -170,7 +171,6 @@ class homepageState extends State<homepage> {
       body:Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
-
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -181,7 +181,10 @@ class homepageState extends State<homepage> {
             icon: Icon(Icons.account_circle),
             label: 'Profile',
           ),
-
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add_outlined),
+            label: 'NAN',
+          ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.blueAccent,

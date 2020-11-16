@@ -2,18 +2,19 @@ import 'dart:convert';
 
 import 'package:LoisirProj/controller/utilities/ApiUrl.dart';
 import 'package:LoisirProj/model/Loisir.dart';
-import 'package:LoisirProj/view/creneau_foot/creneaux.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'package:http/http.dart' as http;
 
+import '../Picker.dart';
+
 class InfoPage extends StatefulWidget {
-  final String id_loisir;
+  final String id_loisir,type;
 
 
-  InfoPage({this.id_loisir});
+  InfoPage({this.id_loisir,this.type});
 
   @override
   _InfoPageState createState() => _InfoPageState();
@@ -89,27 +90,27 @@ class _InfoPageState extends State<InfoPage> {
 
           carouselSlider = CarouselSlider(
             options: CarouselOptions(
-            height: 650.0,
-            initialPage: 0,
+              height: 650.0,
+              initialPage: 0,
 
-            autoPlay: true,
-            reverse: false,
-            enableInfiniteScroll: true,
-            autoPlayInterval: Duration(seconds: 2),
-            autoPlayAnimationDuration: Duration(milliseconds: 2000),
-           pauseAutoPlayOnTouch: true,
-            scrollDirection: Axis.horizontal,
-           onPageChanged: (index, reason) => {
-           setState(() {
-           _current = index;
-           })
-           },
-           /* onPageChanged: (index) {
+              autoPlay: true,
+              reverse: false,
+              enableInfiniteScroll: true,
+              autoPlayInterval: Duration(seconds: 2),
+              autoPlayAnimationDuration: Duration(milliseconds: 2000),
+              pauseAutoPlayOnTouch: true,
+              scrollDirection: Axis.horizontal,
+              onPageChanged: (index, reason) => {
+                setState(() {
+                  _current = index;
+                })
+              },
+              /* onPageChanged: (index) {
               setState(() {
                 _current = index;
               });
             },*/
-      ),
+            ),
             items: imgList.map((imgUrl) {
               return Builder(
                 builder: (BuildContext context) {
@@ -212,7 +213,7 @@ class _InfoPageState extends State<InfoPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-      /*  Visibility(
+        /*  Visibility(
           visible: !_isOpen,
           child: Expanded(
             child: OutlineButton(
@@ -317,14 +318,13 @@ class _InfoPageState extends State<InfoPage> {
   }
 
   _reserver() {
-    if(id_loisir=='1'){
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => creneaux()),
-        );
-    }else{
-      print("+ $id_loisir");
-    }  }
+
+    Navigator.push(
+      context,
+     // MaterialPageRoute(builder: (context) => creneau(widget.type)),
+      MaterialPageRoute(builder: (context) => Picker(widget.type)),
+    );
+  }
 }
 
 
