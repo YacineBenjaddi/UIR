@@ -1,5 +1,5 @@
 class Loisir{
-  String id_loisir,nom,description,latitude,longitude,type;
+  String id_loisir,nom,description,latitude,longitude,type,capacite;
 
   Loisir({
     this.id_loisir,
@@ -7,7 +7,8 @@ class Loisir{
     this.description,
     this.latitude,
     this.longitude,
-    this.type
+    this.type,
+    this.capacite
   });
   factory Loisir.fromJson(Map<String, dynamic> json) {
     return Loisir(
@@ -16,7 +17,8 @@ class Loisir{
         description: json['description'] as String,
         latitude: json['latitude'] as String,
         longitude: json['longitude'] as String,
-        type: json['type'] as String
+        type: json['type'] as String,
+        capacite: json['capacite'] as String
     );
   }
 }

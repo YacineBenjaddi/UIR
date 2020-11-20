@@ -55,7 +55,7 @@ class _SignupPasswordState extends State<SignupPassword> {
     if (value == 1) {
      // PopUp();
       var route = new MaterialPageRoute(
-        builder: (BuildContext context) => new homepage(email: email),
+        builder: (BuildContext context) => new homepage(email),
       );
       Navigator.of(context).push(route);
     }

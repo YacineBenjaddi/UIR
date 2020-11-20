@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
 
         //'ForgotPassword':(context)=>ForgotPassword(),
         'CheckEmail':(context)=>CheckEmail(),
-        '/home':(context)=>homepage(),
+
         //'ValidateCode':(context)=>ValidateCode(),
       },
 

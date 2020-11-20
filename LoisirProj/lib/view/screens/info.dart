@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:LoisirProj/controller/utilities/ApiUrl.dart';
 import 'package:LoisirProj/model/Loisir.dart';
+import 'package:LoisirProj/model/Photo.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -10,12 +11,10 @@ import 'package:http/http.dart' as http;
 
 import '../Picker.dart';
 
+List<Photo> _photos = [];
 class InfoPage extends StatefulWidget {
   final String id_loisir,type;
-
-
   InfoPage({this.id_loisir,this.type});
-
   @override
   _InfoPageState createState() => _InfoPageState();
 }
@@ -24,17 +23,11 @@ class _InfoPageState extends State<InfoPage> {
   bool _isOpen = false;
   PanelController _panelController = PanelController();
 
-  List imgList = [
-    'https://images.unsplash.com/photo-1502117859338-fd9daa518a9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-    'https://images.unsplash.com/photo-1554321586-92083ba0a115?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-    'https://images.unsplash.com/photo-1536679545597-c2e5e1946495?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-    'https://images.unsplash.com/photo-1543922596-b3bbaba80649?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-    'https://images.unsplash.com/photo-1502943693086-33b5b1cfdf2f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=668&q=80'
-  ];
+  List imgList = [];
   CarouselSlider carouselSlider;
   int _current = 0;
 
-  var id_loisir,nom,description,latitude,longitude;
+  var id_loisir,nom,description,latitude,longitude,id_photo,nomphoto,capacite;
 
   @override
   void initState(){
@@ -43,7 +36,9 @@ class _InfoPageState extends State<InfoPage> {
     description="";
     latitude="";
     longitude="";
+    capacite="";
     _getOneLoisir();
+    _getPhotos();
 
   }
 
@@ -71,9 +66,33 @@ class _InfoPageState extends State<InfoPage> {
         description = dataloisir[0]['description'];
         latitude = dataloisir[0]['latitude'];
         longitude = dataloisir[0]['longitude'];
+        capacite = dataloisir[0]['capacite'];
       });
     }
     return dataloisir;
+  }
+
+  Future<List<Photo>> _getPhotos() async {
+    var msg = "";
+    final response = await http.post(ApiUrl.getPhotosTerrains, body: {
+      "id_loisir": id_loisir,
+    });
+
+    final List fetchedData = json.decode(response.body);
+
+    final List<Photo> fetchedPhotos = [];
+    fetchedData.forEach((lois) {
+      Photo photos = Photo(
+          id_photo: lois["id_photo"],
+          nom: lois["nom"]
+      );
+      imgList.add(ApiUrl.imagesTerrain+photos.nom);
+      fetchedPhotos.add(photos);
+    });
+
+    //_markers = fetchedLoisir;
+    _photos=fetchedPhotos;
+
   }
 
 
@@ -322,7 +341,7 @@ class _InfoPageState extends State<InfoPage> {
     Navigator.push(
       context,
      // MaterialPageRoute(builder: (context) => creneau(widget.type)),
-      MaterialPageRoute(builder: (context) => Picker(widget.type)),
+      MaterialPageRoute(builder: (context) => Picker(type:widget.type,capacite:capacite)),
     );
   }
 }

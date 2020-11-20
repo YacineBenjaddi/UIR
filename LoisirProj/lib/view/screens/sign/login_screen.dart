@@ -17,7 +17,7 @@ import '../../homepage.dart';
 
 import 'SignupEmail.dart';
 
-
+String profile,gender,id_user;
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -50,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
     print(newuser);
     if (newuser == false) {
       Navigator.pushReplacement(
-          context, new MaterialPageRoute(builder: (context) => homepage(email: user.text)));
+          context, new MaterialPageRoute(builder: (context) => homepage(user.text)));
     }
   }
 
@@ -72,6 +72,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
       nb_block = datauser[0]['nb_block'];
       date_fin = datauser[0]['date_fin_block'];
+      profile= datauser[0]['profile'];
+      gender=datauser[0]['gender'];
+      id_user=datauser[0]['id_user'];
       print("$date_fin $nb_block");
       _login();
     }else{
@@ -104,10 +107,12 @@ class _LoginScreenState extends State<LoginScreen> {
       });
     }
 
-    if (datauser[0]['profile'] == 'User' ) {
+    if (datauser[0]['profile'] == 'User'||datauser[0]['profile'] == 'Personnel' ) {
       logindata.setBool('login', false);
       logindata.setString('username', user.text);
-
+      logindata.setString('gender', gender);
+      logindata.setString('profile', profile);
+      logindata.setString('id_user', id_user);
       final DateTime now = DateTime.now();
       final DateFormat formatter = DateFormat('yyyy-MM-dd');
       final String formatted = formatter.format(now);
@@ -120,7 +125,8 @@ class _LoginScreenState extends State<LoginScreen> {
        PopUp_Block_temporory();
       }else if(int.parse(datauser[0]['penalty'])<3){
 
-        Navigator.of(context).pushReplacementNamed("/home");
+        Navigator.pushReplacement(
+            context, new MaterialPageRoute(builder: (context) => homepage(user.text)));
       }
     }
 

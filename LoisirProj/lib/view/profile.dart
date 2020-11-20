@@ -7,6 +7,9 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'package:http/http.dart' as http;
 
+import 'ReservationUser.dart';
+import 'screens/sign/EditPassword.dart';
+
 class ProfilePage extends StatefulWidget {
   final String email;
 
@@ -18,7 +21,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   bool _isOpen = false;
   PanelController _panelController = PanelController();
-  var id,Fname,Lname,email,gender,password,code, year, branch, pinalite;
+  var id,Fname,Lname,email,gender,password,code, year, branch, pinalite,photo;
 
   @override
   void initState(){
@@ -32,6 +35,7 @@ class _ProfilePageState extends State<ProfilePage> {
     year="";
     branch="";
     pinalite="";
+    photo="";
     _getOne();
 
   }
@@ -64,6 +68,7 @@ class _ProfilePageState extends State<ProfilePage> {
         year = datauser[0]['year'];
         branch = datauser[0]['branch'];
         pinalite = datauser[0]['penalty'];
+        photo = datauser[0]['photo'];
       });
     }
     return datauser;
@@ -82,12 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
             alignment: Alignment.topCenter,
             heightFactor: 0.7,
             child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/iconephoto.jpg'),
-                  fit: BoxFit.cover,
-                ),
-              ),
+             child: Image.network(ApiUrl.imagesProfiles+photo),
             ),
           ),
 
@@ -177,7 +177,11 @@ class _ProfilePageState extends State<ProfilePage> {
           visible: !_isOpen,
           child: Expanded(
             child: OutlineButton(
-              onPressed: () => _panelController.open(),
+              onPressed: () => { Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => reservationUser(email:email,id: id)),
+              )
+            },
               borderSide: BorderSide(color: Colors.blue),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30)),
@@ -206,7 +210,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   ? (MediaQuery.of(context).size.width - (2 * hPadding)) / 1.6
                   : double.infinity,
               child: FlatButton(
-                onPressed: () => print('edit password'),
+                onPressed: () => { Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => EditPassword(email)),
+                )
+              },
                 color: Colors.blue,
                 textColor: Colors.white,
                 shape: RoundedRectangleBorder(

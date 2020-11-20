@@ -1,53 +1,543 @@
 import 'dart:convert';
-
+import 'package:jiffy/jiffy.dart';
 import 'package:LoisirProj/controller/utilities/ApiUrl.dart';
 import 'package:LoisirProj/model/horaire.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import "package:flutter/cupertino.dart";
 import 'package:http/http.dart' as http;
-var day_calendar;
+
+import 'homepage.dart';
+var day_calendar,day_nam,gender,profile,id_user,email;
 class Picker extends StatefulWidget {
-  String type;
-  Picker(this.type);
+  String type,capacite;
+  Picker({this.type,this.capacite});
   @override
   _PickerState createState() => _PickerState();
 
 }
 
 Future<List<horaire>> getDispo(String type, DateTime d) async {
-  final DateTime now = DateTime.now();
-  var hour;
-  String da="${day_calendar}".split(' ')[0];
+  if (type == "piscine") {
+return getDispoPiscine(type, d, gender, profile);
+  } else {
+    final DateTime now = DateTime.now();
+    var hour;
 
-  if(now.day==d.day){
-     hour= "${now.hour}";
+    String da = "${day_calendar}".split(' ')[0];
+
+    if (now.isAtSameMomentAs(d)) {
+      hour = "${now.hour}";
+    }
+    else if (d.isAfter(now)) {
+      hour = "8";
+    } else {
+      return null;
+    }
+
+    final response = await http.post(ApiUrl.getDispo, body: {
+      "type": type, "date_res": da, "hour": hour,
+    });
+
+    return horaireFromJson(response.body);
   }
-  else if(d.day>now.day){
-     hour= "8";
+}
+Future<List<horaire>> getDispoPiscine(String type, DateTime d,String gender,String profile) async {
 
-  }else{
+  final DateTime now = DateTime.now();
+  var hour,hour_max,hour_not;
+  String da="${day_calendar}".split(' ')[0];
+  day_nam= DateFormat('EEEE').format(d);
+  var hour_now;
+
+  if (now.isAtSameMomentAs(d)) {
+    hour_now = "${now.hour}";
+  }
+  else if (d.isAfter(now)) {
+    hour_now = "7";
+  } else {
     return null;
   }
 
-  final response = await http.post(ApiUrl.getDispo, body: {
-    "type": type,"date_res":da,"hour": hour,
+if(Jiffy(d).week%2==0){
+  switch(day_nam) {
+    case 'Monday': {
+      // statements;
+      if(gender=='male'){
+        if(profile=="User"){
+          hour= "14";
+          hour_not="18";
+          hour_max="21";
+        }else{
+          hour= "18";
+          hour_max="19";
+          hour_not="0";
+
+        }
+      }
+      else{
+        if(profile=="User"){
+          hour= "8";
+          hour_max="13";
+          hour_not="24";
+        }else{
+          hour= "13";
+          hour_max="14";
+          hour_not="24";
+        }
+      }
+    }
+    break;
+
+    case 'Tuesday': {
+      //statements;
+      if(gender=='male'){
+        if(profile=="User"){
+          hour= "8";
+          hour_max="13";
+          hour_not="24";
+        }else{
+          hour= "24";
+          hour_max="24";
+          hour_not="24";
+        }
+      }
+      else{
+        if(profile=="User"){
+          hour= "8";
+          hour_max="21";
+          hour_not="24";
+        }else{
+          hour= "24";
+          hour_max="24";
+          hour_not="24";
+        }
+      }
+    }
+    break;
+    case 'Wednesday': {
+      //statements;
+      if(gender=='male'){
+        if(profile=="User"){
+          hour= "8";
+          hour_max="21";
+          hour_not="18";
+        }else{
+          hour= "18";
+          hour_max="19";
+          hour_not="24";
+        }
+      }
+      else{
+        if(profile=="User"){
+          hour= "14";
+          hour_max="21";
+          hour_not="18";
+        }else{
+          hour= "13";
+          hour_max="14";
+          hour_not="24";
+        }
+      }
+    }
+    break;
+    case 'Thursday': {
+      //statements;
+      if(gender=='male'){
+        if(profile=="User"){
+          hour= "8";
+          hour_max="13";
+          hour_not="24";
+        }else{
+          hour= "24";
+          hour_max="24";
+          hour_not="24";
+        }
+      }
+      else{
+        if(profile=="User"){
+          hour= "13";
+          hour_max="21";
+          hour_not="24";
+        }else{
+          hour= "24";
+          hour_max="24";
+          hour_not="24";
+        }
+      }
+    }
+    break;
+    case 'Friday': {
+      //statements;
+      if(gender=='male'){
+        if(profile=="User"){
+          hour= "14";
+          hour_max="21";
+          hour_not="18";
+        }else{
+          hour= "18";
+          hour_max="19";
+          hour_not="24";
+        }
+      }
+      else{
+        if(profile=="User"){
+          hour= "8";
+          hour_max="13";
+          hour_not="24";
+        }else{
+          hour= "13";
+          hour_max="14";
+          hour_not="24";
+        }
+      }
+    }
+    break;
+    case 'Saturday': {
+      //statements;
+      if(gender=='male'){
+        if(profile=="User"){
+          hour= "8";
+          hour_max="13";
+          hour_not="24";
+        }else{
+          hour= "24";
+          hour_max="24";
+          hour_not="24";
+        }
+      }
+      else{
+        if(profile=="User"){
+          hour= "13";
+          hour_max="21";
+          hour_not="24";
+        }else{
+          hour= "24";
+          hour_max="24";
+          hour_not="24";
+        }
+      }
+    }
+    break;
+    case 'Sunday': {
+      //statements;
+      if(gender=='male'){
+        if(profile=="User"){
+          hour= "8";
+          hour_max="14";
+          hour_not="0";
+        }else{
+          hour= "24";
+          hour_max="24";
+          hour_not="0";
+        }
+      }
+      else{
+        if(profile=="User"){
+          hour= "14";
+          hour_max="21";
+          hour_not="0";
+        }else{
+          hour= "24";
+          hour_max="24";
+          hour_not="0";
+        }
+      }
+    }
+    break;
+    default: {
+      //statements;
+      print("its not monday or tuesday");
+    }
+    break;
+  }//calenad week pair
+}else{
+  switch(day_nam) {
+    case "Monday": {
+      // statements;
+      if(gender=='male'){
+        if(profile=="User"){
+          hour= "8";
+          hour_max="13";
+          hour_not="0";
+        }else{
+          hour= "13";
+          hour_max="14";
+          hour_not="0";
+        }
+      }
+      else{
+        if(profile=="User"){
+          hour= "14";
+          hour_max="21";
+          hour_not="18";
+        }else{
+          hour= "18";
+          hour_max="19";
+          hour_not="0";
+        }
+      }
+    }
+    break;
+
+    case "Tuesday": {
+      //statements;
+      if(gender=='male'){
+        if(profile=="User"){
+          hour= "8";
+          hour_max="21";
+          hour_not="0";
+        }else{
+          hour= "24";
+          hour_max="24";
+          hour_not="0";
+        }
+      }
+      else{
+        if(profile=="User"){
+          hour= "8";
+          hour_max="13";
+          hour_not="0";
+        }else{
+          hour= "24";
+          hour_max="24";
+          hour_not="0";
+        }
+      }
+    }
+    break;
+    case "Wednesday": {
+      //statements;
+      if(gender=='male'){
+        if(profile=="User"){
+          hour= "14";
+          hour_max="21";
+          hour_not="18";
+        }else{
+          hour= "13";
+          hour_max="14";
+          hour_not="0";
+        }
+      }
+      else{
+        if(profile=="User"){
+          hour= "8";
+          hour_max="13";
+          hour_not="24";
+        }else{
+          hour= "18";
+          hour_max="19";
+          hour_not="24";
+        }
+      }
+    }
+    break;
+    case "Thursday": {
+      //statements;
+      if(gender=='male'){
+        if(profile=="User"){
+          hour= "13";
+          hour_max="21";
+          hour_not="0";
+        }else{
+          hour= "24";
+          hour_max="24";
+          hour_not="0";
+        }
+      }
+      else{
+        if(profile=="User"){
+          hour= "8";
+          hour_max="13";
+          hour_not="0";
+        }else{
+          hour= "24";
+          hour_max="24";
+          hour_not="0";
+        }
+      }
+    }
+    break;
+    case "Friday": {
+      //statements;
+      if(gender=='male'){
+        if(profile=="User"){
+          hour= "8";
+          hour_max="13";
+          hour_not="0";
+        }else{
+          hour= "13";
+          hour_max="14";
+          hour_not="0";
+        }
+      }
+      else{
+        if(profile=="User"){
+          hour= "14";
+          hour_max="21";
+          hour_not="18";
+        }else{
+          hour= "18";
+          hour_max="19";
+          hour_not="0";
+        }
+      }
+    }
+    break;
+    case "Saturday": {
+      //statements;
+      if(gender=='male'){
+        if(profile=="User"){
+          hour= "13";
+          hour_max="21";
+          hour_not="0";
+        }else{
+          hour= "24";
+          hour_max="24";
+          hour_not="0";
+        }
+      }
+      else{
+        if(profile=="User"){
+          hour= "8";
+          hour_max="13";
+          hour_not="0";
+        }else{
+          hour= "24";
+          hour_max="24";
+          hour_not="0";
+        }
+      }
+    }
+    break;
+    case 'Sunday': {
+      //statements;
+      if(gender=='male'){
+        if(profile=="User"){
+          hour= "14";
+          hour_max="21";
+          hour_not="24";
+        }else{
+          hour= "24";
+          hour_max="24";
+          hour_not="24";
+        }
+      }
+      else{
+        if(profile=="User"){
+          hour= "8";
+          hour_max="14";
+          hour_not="24";
+        }else{
+          hour= "24";
+          hour_max="24";
+          hour_not="24";
+        }
+      }
+    }
+    break;
+
+    default: {
+      //statements;
+      print("its not monday or tuesday");
+    }
+    break;
+  }
+  //calendar week impair
+}
+  final response = await http.post(ApiUrl.getDispoPiscine, body: {"hour": hour,"hour_max":hour_max,"hour_not":hour_not,"hour_now":hour_now,
   });
-
+print("response Pisonceee ${response.body}");
   return horaireFromJson(response.body);
-
 }
 
 class _PickerState extends State<Picker> {
+  Future<String> addReservation(String cre,DateTime d,String type, String id) async{
+    String da = "${d}".split(' ')[0];
+    final response = await http.post(ApiUrl.addRes, body: {"date": da,"id_horaire":cre,"id_user":id,"type":type,"capacite":widget.capacite
+    });
+    print("response Pisonceee ${response.body}");
+var data=jsonDecode(response.body);
+print(data.toString());
+      return data.toString();
+  }
+
+  int PopUp_Confirmer(String cre,DateTime d,String type, String id) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(" ERROR",
+                style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'Montserrat')),
+            content: Text("Etes vous sure de choisir ce creneau ?",
+                style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'Montserrat')),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("Confirmer"),
+                onPressed: (){
+                  Navigator.of(context).pop();
+                 // String test;
+                   addReservation(cre,d,type,id).then((result) {
+                  if (result=='success') {
+                    Navigator.pushReplacement(
+                        context, new MaterialPageRoute(builder: (context) => homepage(email)));
+                  } else {
+                    print("ressss"+result);
+                    PopUp_Fail();
+                  }
+                  });
+                  //reserve(String cre,DateTime d,String type, String id);
+                },
+              )
+            ],
+          );
+        });
+  }
+  int PopUp_Fail() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(" ERROR",
+                style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'Montserrat')),
+            content: Text("ce creneau est indisponible",
+                style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'Montserrat')),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+  SharedPreferences logindata;
   CalendarController _controller;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getDispo(widget.type,day_calendar);
+    getDispoPiscine(widget.type,day_calendar, gender, profile);
     _controller = CalendarController();
+    initial();
   }
 
   TextStyle dayStyle(FontWeight fontWeight)
@@ -60,6 +550,15 @@ class _PickerState extends State<Picker> {
   {
     super.dispose();
     _controller.dispose();
+  }
+  void initial() async {
+    logindata = await SharedPreferences.getInstance();
+    setState(() {
+      gender = logindata.getString('gender');
+      profile=logindata.getString('profile');
+      id_user=logindata.getString('id_user');
+      email=logindata.getString('username');
+    });
   }
 
   @override
@@ -112,13 +611,18 @@ class _PickerState extends State<Picker> {
                 ),
                 calendarController: _controller,
                 onDaySelected: (day, events, holidays) {
-                  print("day actuelll $day");
+
                   day_calendar=day;
-                  getDispo(widget.type, day);
                   setState(() {
-                    getDispo(widget.type, day);
+
+                      getDispo(widget.type, day);
+
+
                   });
-                  print("contrrrrrrrrrrrr ${_controller.isToday(day)}");
+                  day_nam= DateFormat('EEEE').format(day);
+
+                  print("day nameeeeeeeeee : $day_nam and gender $gender profile $profile ");
+
 
                 } ,
 
@@ -164,12 +668,29 @@ class _PickerState extends State<Picker> {
                                         ],
                                       ),
                                     ),
+
+
+                                  onTap: () {
+                                      PopUp_Confirmer(basket.id_horaire,day_calendar,widget.type,id_user);
+                                  },
                                     ),
                               );
                             },
                           );
                         }
-                        return CircularProgressIndicator();
+                        return
+
+                          Column(
+                            children: [
+                              CircularProgressIndicator(
+                                backgroundColor: Colors.cyanAccent,
+                                valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
+
+                              ),
+                              Text("cliquer sur une date valide")
+                            ],
+                          );
+
                       },
                     ),
                   ),

@@ -20,7 +20,7 @@ Set<Marker> marks;
 class homepage extends StatefulWidget {
   final String email;
 
-  homepage({this.email});
+  homepage(this.email);
 
   @override
   State<homepage> createState() => homepageState();
@@ -40,6 +40,7 @@ class homepageState extends State<homepage> {
     logindata = await SharedPreferences.getInstance();
     setState(() {
       username = logindata.getString('username');
+
       _getLoisirs();
     });
   }
@@ -60,7 +61,8 @@ class homepageState extends State<homepage> {
           description: lois["description"],
           latitude:lois["latitude"],
           longitude: lois["longitude"],
-          type: lois["type"]
+          type: lois["type"],
+        capacite: lois["capacite"]
       );
 
       fetchedLoisir.add(loisirs);
@@ -125,7 +127,8 @@ class homepageState extends State<homepage> {
                   context,
                   MaterialPageRoute(builder: (context) => InfoPage(id_loisir:loi.id_loisir,type: loi.type)),
                 );
-              },
+
+                },
               infoWindow: InfoWindow(title: loi.nom),
               icon: BitmapDescriptor.defaultMarkerWithHue(
                 BitmapDescriptor.hueBlue,
