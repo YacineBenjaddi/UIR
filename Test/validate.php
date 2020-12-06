@@ -13,7 +13,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 
 $response = array();
 $email = $_POST['email'];
-$code = $_POST['code'];
+$code = $_POST['reset'];
 
 
 $sql ="SELECT * FROM User WHERE email='$email' and reset='$code' ";
