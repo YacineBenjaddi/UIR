@@ -1,5 +1,5 @@
 class ApiUrl{
-static String ip="http://192.168.1.103/";
+static String ip="http://192.168.1.4/";
 static String getFoot = ip+'Test/getHoraire.php';
 static String submit = ip+'Test/submit.php';
 static String validate = ip+'Test/validate.php';

@@ -126,9 +126,11 @@ class _ProfilePageState extends State<ProfilePage> {
         fit: StackFit.expand,
         children: <Widget>[
           FractionallySizedBox(
+
             alignment: Alignment.topCenter,
             heightFactor: 0.7,
             child: Container(
+              color: Colors.blueAccent,
              child: Image.network(ApiUrl.imagesProfiles+photo),
             ),
           ),
@@ -153,7 +155,7 @@ class _ProfilePageState extends State<ProfilePage> {
             body: GestureDetector(
               onTap: () => _panelController.close(),
               child: Container(
-                color: Colors.blueAccent,
+               // color: Colors.blueAccent,
               ),
             ),
             panelBuilder: (ScrollController controller) =>

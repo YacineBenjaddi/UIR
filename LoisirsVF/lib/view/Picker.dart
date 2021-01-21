@@ -121,8 +121,13 @@ class _PickerState extends State<Picker> {
                   addReservation(cre,d,id).then((result) async {
                     if (result=='success') {
                       print("daaaaaateeeetimmmmmmmmmmme $d");
-                      //await notificationPlugin.showNotification();
+                     //  await notificationPlugin.showNotification();
+                      final DateTime now = DateTime.now();
+                      var hour = "${now.hour}";
+
+                      if(int.parse(cre)-int.parse(hour)>1){
                       await notificationPlugin.scheduleNotificationCancel(d, cre);
+                      }
                       await notificationPlugin.scheduleNotificationAlert(d, cre);
 
                       /*Navigator.pushReplacement(
